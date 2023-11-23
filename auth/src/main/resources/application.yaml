@@ -1,5 +1,13 @@
-jwt:
-  clientId: glee-o-meter
-  client-secret: secret
-  accessTokenValidititySeconds: 100
-  refreshTokenValiditySeconds: 1000
+spring:
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:  jdbc:mysql://localhost:3306/platform-auth
+    username: root
+    password: root
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect

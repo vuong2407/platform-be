@@ -27,6 +27,9 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthFilter authFilter;
 
+    @Autowired
+    private EncodeConfig encodeConfig;
+
     // User Creation
     @Bean
     public UserDetailsService userDetailsService() {
@@ -47,17 +50,11 @@ public class SecurityConfig {
                 .build();
     }
 
-    // Password Encoding
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setPasswordEncoder(encodeConfig.passwordEncoder());
         return authenticationProvider;
     }
 

@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import vn.whatsenglish.auth.entity.UserInfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,9 +20,16 @@ public class UserInfoDetails implements UserDetails {
     public UserInfoDetails(UserInfo userInfo) {
         name = userInfo.getName();
         password = userInfo.getPassword();
+
+//        this.authorities = new ArrayList<>();
+//        String[] roles = userInfo.getRoles().split(",");
+//        for (int i = 0; i < roles.length; i++) {
+//            this.authorities.add(new SimpleGrantedAuthority(roles[i]));
+//        }
         authorities = Arrays.stream(userInfo.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+        System.out.println(authorities);
     }
 
     @Override
