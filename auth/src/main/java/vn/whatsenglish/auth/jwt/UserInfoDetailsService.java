@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.service;
+package vn.whatsenglish.auth.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,7 @@ import vn.whatsenglish.auth.repository.UserRepository;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserInfoDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;

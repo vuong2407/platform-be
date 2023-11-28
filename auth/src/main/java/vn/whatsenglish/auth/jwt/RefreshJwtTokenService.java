@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.service;
+package vn.whatsenglish.auth.jwt;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

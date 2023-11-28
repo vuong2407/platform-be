@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +21,10 @@ import vn.whatsenglish.auth.dto.response.TokenRefreshResponse;
 import vn.whatsenglish.auth.entity.RefreshToken;
 import vn.whatsenglish.auth.entity.User;
 import vn.whatsenglish.auth.exception.TokenRefreshException;
-import vn.whatsenglish.auth.service.JwtService;
-import vn.whatsenglish.auth.service.RefreshJwtTokenService;
-import vn.whatsenglish.auth.service.UserInfoDetails;
-import vn.whatsenglish.auth.service.UserService;
+import vn.whatsenglish.auth.jwt.JwtService;
+import vn.whatsenglish.auth.jwt.RefreshJwtTokenService;
+import vn.whatsenglish.auth.jwt.UserInfoDetails;
+import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
 
 import javax.validation.Valid;
 
@@ -34,7 +33,7 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserInfoDetailsService userInfoDetailsService;
 
     @Autowired
     private JwtService jwtService;
@@ -52,7 +51,7 @@ public class UserController {
 
     @PostMapping("/addNewUser")
     public String addNewUser(@RequestBody User user) {
-        return userService.addUser(user);
+        return userInfoDetailsService.addUser(user);
     }
 
     @GetMapping("/user/userProfile")

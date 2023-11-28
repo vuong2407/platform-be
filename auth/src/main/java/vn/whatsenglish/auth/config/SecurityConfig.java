@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import vn.whatsenglish.auth.filter.JwtAuthFilter;
-import vn.whatsenglish.auth.service.UserService;
+import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -39,7 +39,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return new UserInfoDetailsService();
     }
 
     @Bean

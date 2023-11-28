@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.service;
+package vn.whatsenglish.auth.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

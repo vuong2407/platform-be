@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.service;
+package vn.whatsenglish.auth.jwt;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
