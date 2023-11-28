@@ -1,24 +1,21 @@
 package vn.whatsenglish.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.whatsenglish.auth.config.EncodeConfig;
-import vn.whatsenglish.auth.entity.UserInfo;
-import vn.whatsenglish.auth.repository.UserInfoRepository;
+import vn.whatsenglish.auth.entity.User;
+import vn.whatsenglish.auth.repository.UserRepository;
 
 import java.util.Optional;
 
 @Service
-public class UserInfoService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserInfoRepository repository;
+    private UserRepository userRepository;
 
     @Autowired
     private EncodeConfig encodeConfig;
@@ -26,17 +23,16 @@ public class UserInfoService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<UserInfo> userDetail = repository.findByName(username);
+        Optional<User> userDetail = userRepository.findByName(username);
 
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    public String addUser(UserInfo userInfo) {
-        userInfo.setPassword(encodeConfig.passwordEncoder().encode(userInfo.getPassword()));
-        repository.save(userInfo);
+    public String addUser(User user) {
+        user.setPassword(encodeConfig.passwordEncoder().encode(user.getPassword()));
+        userRepository.save(user);
         return "User Added Successfully";
     }
-
 
 }

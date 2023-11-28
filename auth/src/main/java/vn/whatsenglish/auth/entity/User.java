@@ -8,11 +8,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfo {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

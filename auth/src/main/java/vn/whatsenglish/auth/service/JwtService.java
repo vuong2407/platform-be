@@ -1,10 +1,15 @@
 package vn.whatsenglish.auth.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +22,8 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
+    @Value("${jwt.app.jwtSecret}")
+    private String jwtSecret;
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
@@ -33,7 +39,7 @@ public class JwtService {
     }
 
     private Key getSignKey() {
-        byte[] keyBytes= Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes= Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -59,13 +65,21 @@ public class JwtService {
                 .getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public Boolean validateToken(String token) {
+        try {
+            final String username = extractUsername(token);
+            extractExpiration(token).before(new Date());
+            return true;
+        } catch (SignatureException | MalformedJwtException e) {
+            System.out.printf("Invalid JWT token: %s", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            System.out.printf("JWT token is expired: %s", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            System.out.printf("JWT token is unsupported: %s", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.printf("JWT claims string is empty: %s", e.getMessage());
+        }
+        return false;
     }
 
 
