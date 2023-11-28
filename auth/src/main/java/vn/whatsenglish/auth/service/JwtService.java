@@ -65,19 +65,22 @@ public class JwtService {
                 .getBody();
     }
 
-    public Boolean validateToken(String token) {
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
+    }
+
+    public Boolean validateToken(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
-            extractExpiration(token).before(new Date());
-            return true;
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         } catch (SignatureException | MalformedJwtException e) {
-            System.out.printf("Invalid JWT token: %s", e.getMessage());
+            System.out.printf("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            System.out.printf("JWT token is expired: %s", e.getMessage());
+            System.out.printf("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            System.out.printf("JWT token is unsupported: %s", e.getMessage());
+            System.out.printf("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.printf("JWT claims string is empty: %s", e.getMessage());
+            System.out.printf("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
     }

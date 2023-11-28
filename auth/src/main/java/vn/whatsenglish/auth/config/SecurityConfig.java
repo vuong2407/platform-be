@@ -1,6 +1,7 @@
 package vn.whatsenglish.auth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import vn.whatsenglish.auth.filter.JwtAuthFilter;
 import vn.whatsenglish.auth.service.UserService;
 
@@ -24,18 +26,22 @@ import vn.whatsenglish.auth.service.UserService;
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthFilter authFilter;
-
-    @Autowired
     private EncodeConfig encodeConfig;
 
-    // User Creation
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver exceptionResolver;
+
+    @Bean
+    public JwtAuthFilter jwtAuthFilter(){
+        return new JwtAuthFilter(exceptionResolver);
+    }
+
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserService();
     }
 
-    // Configuring HttpSecurity
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
@@ -45,7 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/admin/**").authenticated())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
