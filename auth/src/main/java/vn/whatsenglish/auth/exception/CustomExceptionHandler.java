@@ -48,4 +48,10 @@ public class CustomExceptionHandler {
         }
         return errorDetail;
     }
+
+    @ExceptionHandler(NoDataFoundException.class)
+    public ProblemDetail handleNoDataException(NoDataFoundException ex) {
+        ProblemDetail errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());
+        return errorDetail;
+    }
 }

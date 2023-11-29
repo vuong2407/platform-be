@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import vn.whatsenglish.auth.dto.request.LoginRequest;
 import vn.whatsenglish.auth.dto.request.TokenRefreshRequest;
 import vn.whatsenglish.auth.dto.response.JwtResponse;
 import vn.whatsenglish.auth.dto.response.TokenRefreshResponse;
+import vn.whatsenglish.auth.dto.response.UserResponse;
 import vn.whatsenglish.auth.entity.RefreshToken;
 import vn.whatsenglish.auth.entity.User;
 import vn.whatsenglish.auth.exception.TokenRefreshException;
@@ -25,6 +27,7 @@ import vn.whatsenglish.auth.jwt.JwtService;
 import vn.whatsenglish.auth.jwt.RefreshJwtTokenService;
 import vn.whatsenglish.auth.jwt.UserInfoDetails;
 import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
+import vn.whatsenglish.auth.service.IUserService;
 
 import javax.validation.Valid;
 
@@ -34,6 +37,9 @@ public class UserController {
 
     @Autowired
     private UserInfoDetailsService userInfoDetailsService;
+
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     private JwtService jwtService;
@@ -74,17 +80,12 @@ public class UserController {
                         loginRequest.getPassword()
                 )
         );
-        if (authentication.isAuthenticated()) {
-                System.out.println("true");
-                UserInfoDetails userInfoDetails = (UserInfoDetails) authentication.getPrincipal();
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                String jwt = jwtService.generateToken(loginRequest.getUsername());
-                RefreshToken refreshToken = refreshJwtTokenService.createRefreshToken(userInfoDetails.getId());
-                return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
-        } else {
-            System.out.println("false");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("login fail");
-        }
+        System.out.println("true");
+        UserInfoDetails userInfoDetails = (UserInfoDetails) authentication.getPrincipal();
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtService.generateToken(loginRequest.getUsername());
+        RefreshToken refreshToken = refreshJwtTokenService.createRefreshToken(userInfoDetails.getId());
+        return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
     }
 
     @PostMapping("/refreshToken")
@@ -109,6 +110,16 @@ public class UserController {
         Integer userId = userDetails.getId();
         refreshJwtTokenService.deleteByUserId(userId);
         return ResponseEntity.ok("Log out successful!");
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/user/all")
+    public ResponseEntity<?> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUser());
     }
 
 }
