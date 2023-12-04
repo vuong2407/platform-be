@@ -23,6 +23,7 @@
 
     <modules>
         <module>auth</module>
+        <module>product</module>
     </modules>
 
 </project>
