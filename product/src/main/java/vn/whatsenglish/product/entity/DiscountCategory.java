@@ -12,29 +12,25 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Entity(name = "product_category")
+@Entity(name = "discount_category")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class ProductCategory {
+public class DiscountCategory {
 
-    public final static int SOFTWARE_TYPE = 0;
-
-    public final static int HARDWARE_TYPE = 1;
+    public static final int FIXED_DISCOUNT = 1;
+    public static final int PERCENTAGE_DISCOUNT = 2;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
-    private int code;
-
-    @Column
+    @Column(name = "description", columnDefinition="Text")
     private String description;
 
-    @OneToMany(mappedBy = "productCategory")
-    private List<Product> products;
+    @OneToMany(mappedBy = "discountCategory")
+    private List<Discount> discounts;
 }
