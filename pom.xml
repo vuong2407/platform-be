@@ -24,6 +24,7 @@
     <modules>
         <module>auth</module>
         <module>product</module>
+        <module>backend</module>
     </modules>
 
 </project>
