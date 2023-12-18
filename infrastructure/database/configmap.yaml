@@ -1,17 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: mysql-initdb-product-service
-  namespace: product-service
+  name: mysql-cm
+  namespace: dev
 data:
-  init.sql: |
-    CREATE DATABASE IF NOT EXISTS platform-product;
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: mysql-initdb-auth-service
-  namespace: auth-service
-data:
-  init.sql: |
-    CREATE DATABASE IF NOT EXISTS platform-auth;
+  product-db: platform-product
