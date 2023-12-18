@@ -1,10 +1,9 @@
 package vn.whatsenglish.product.util;
 
-import vn.whatsenglish.product.entity.Discount;
 import vn.whatsenglish.product.entity.Product;
-import vn.whatsenglish.product.service.impl.ProcessDiscountService;
-import vn.whatsenglish.product.strategy.discount.IDiscountStrategy;
+import vn.whatsenglish.product.strategy.factory.DiscountFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class DiscountPrizeCaculationUtil {
@@ -13,9 +12,13 @@ public class DiscountPrizeCaculationUtil {
         if (product.getDiscounts().isEmpty()) return product.getPrice();
         final float currentPrice = product.getPrice();
         return product.getDiscounts().stream().reduce(currentPrice, (accumulator, element) -> {
-            ProcessDiscountService processDiscountService = new ProcessDiscountService();
-            IDiscountStrategy discountStrategy = processDiscountService.processDiscount(element);
-            return accumulator - discountStrategy.caculateFinalPrize(currentPrice);
+            Integer discountCategoryId = element.getDiscountCategory().getId();
+            try {
+                return accumulator - DiscountFactory.getDiscount(discountCategoryId, element).caculateFinalPrize(currentPrice);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                     IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }, Float::sum);
     }
 }

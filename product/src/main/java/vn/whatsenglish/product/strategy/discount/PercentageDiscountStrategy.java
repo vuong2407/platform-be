@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import vn.whatsenglish.product.entity.Discount;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PercentageDiscountStrategy implements IDiscountStrategy {
 
-    private Integer percentageDiscount;
+    private Discount discount;
 
     @Override
     public float caculateFinalPrize(float prize) {
-        return prize * ((float) percentageDiscount /100);
+        return prize * ((float) discount.getPercentageDiscount() /100);
     }
 }
