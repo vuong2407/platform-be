@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-product-service
+  namespace: product-service
+spec:
+  selector:
+    matchLabels:
+      app: mysql-product-service
+      namespace: product-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql-product-service
+        namespace: product-service
+    spec:
+      containers:
+        - image: mysql:8.0
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-product-service-pvc
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-product-service
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-auth-service
+  namespace: auth-service
+spec:
+  selector:
+    matchLabels:
+      app: mysql-auth-service
+      namespace: auth-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql-auth-service
+        namespace: auth-service
+    spec:
+      containers:
+        - image: mysql:8.0
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-auth-service-pvc
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-auth-service
