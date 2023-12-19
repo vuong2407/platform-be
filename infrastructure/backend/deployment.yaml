@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-service
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-service
+      namespace: dev
+  template:
+    metadata:
+      labels:
+        app: backend-service
+        namespace: dev
+    spec:
+      containers:
+        - name: backend-service
+          image: backend-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
