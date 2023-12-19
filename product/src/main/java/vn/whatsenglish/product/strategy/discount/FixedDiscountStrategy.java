@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
+import vn.whatsenglish.product.entity.Discount;
 
 @Data
 @AllArgsConstructor
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class FixedDiscountStrategy implements IDiscountStrategy{
 
-    private Float fixedDiscount;
+    private Discount discount;
 
     @Override
     public float caculateFinalPrize(float prize) {
-        return fixedDiscount;
+        return discount.getFixedDiscount();
     }
 }
