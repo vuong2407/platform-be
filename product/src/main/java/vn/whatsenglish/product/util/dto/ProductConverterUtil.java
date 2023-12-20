@@ -9,7 +9,7 @@ import vn.whatsenglish.product.util.DiscountPrizeCaculationUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDtoUtil {
+public class ProductConverterUtil {
 
     public static ProductInfoResponseDto toProductInfoDto(Product product) {
         InfoCategoryOfProductDto productCategory = InfoCategoryOfProductDto.newBuilder()

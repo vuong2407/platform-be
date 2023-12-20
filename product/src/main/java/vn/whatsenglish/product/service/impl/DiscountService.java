@@ -2,16 +2,16 @@ package vn.whatsenglish.product.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.whatsenglish.CreateDiscountRequestDto;
+import vn.whatsenglish.DiscountResponseDto;
 import vn.whatsenglish.product.constant.Messages;
-import vn.whatsenglish.product.dto.request.CreateDiscountRequestDTO;
-import vn.whatsenglish.product.dto.response.DiscountResponseDTO;
 import vn.whatsenglish.product.entity.Discount;
 import vn.whatsenglish.product.entity.DiscountCategory;
-import vn.whatsenglish.product.entity.Product;
 import vn.whatsenglish.product.exception.BadRequestException;
 import vn.whatsenglish.product.repository.DiscountCategoryRepository;
 import vn.whatsenglish.product.repository.DiscountRepository;
 import vn.whatsenglish.product.service.IDiscountService;
+import vn.whatsenglish.product.util.dto.DiscountConverterUtil;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class DiscountService implements IDiscountService {
     DiscountRepository discountRepository;
 
     @Override
-    public DiscountResponseDTO createDiscount(CreateDiscountRequestDTO body) {
+    public DiscountResponseDto createDiscount(CreateDiscountRequestDto body) {
         // todo: validate body
 
         DiscountCategory discountCategory = (DiscountCategory) discountCategoryRepository.findById(body.getDiscountCategory())
@@ -36,7 +36,7 @@ public class DiscountService implements IDiscountService {
         Discount discount = Discount.ofDto(body);
         discount.setDiscountCategory(discountCategory);
         try {
-            return DiscountResponseDTO.ofEntity(discountRepository.save(discount));
+            return DiscountConverterUtil.toDiscountInfoDto(discountRepository.save(discount));
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

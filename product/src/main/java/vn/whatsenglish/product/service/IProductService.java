@@ -1,13 +1,12 @@
 package vn.whatsenglish.product.service;
 
+import vn.whatsenglish.CreateProductRequestDto;
 import vn.whatsenglish.ProductInfoResponseDto;
-import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
-import vn.whatsenglish.product.entity.Product;
 
 import java.util.List;
 
 public interface IProductService {
     ProductInfoResponseDto getProductById(Integer id);
-    Product createProduct(CreateProductRequestDTO body);
+    ProductInfoResponseDto createProduct(CreateProductRequestDto body);
     void addDiscountToProduct(List<Integer> discountIds, Integer productId);
 }
