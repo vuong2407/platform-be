@@ -25,6 +25,7 @@
         <module>auth</module>
         <module>product</module>
         <module>backend</module>
+        <module>proto</module>
     </modules>
 
 </project>

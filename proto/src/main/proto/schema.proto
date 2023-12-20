@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package vn.whatsenglish;
+
+message InfoCategoryOfProductDto {
+    int32 id = 1;
+    string name = 2;
+    int32 code = 3;
+    string description = 4;
+}
+
+message InfoImageDto {
+    int32 id = 1;
+    string url = 2;
+}
+
+message ProductInfoResponseDto {
+    int32 id = 1;
+    InfoCategoryOfProductDto productCategory = 2;
+    string displayName = 3;
+    float price = 4;
+    float displayPrice = 5;
+    string description = 6;
+    string thumbnail = 7;
+    repeated InfoImageDto images = 8;
+}
