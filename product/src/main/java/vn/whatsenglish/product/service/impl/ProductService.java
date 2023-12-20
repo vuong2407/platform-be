@@ -3,6 +3,9 @@ package vn.whatsenglish.product.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.whatsenglish.InfoCategoryOfProductDto;
+import vn.whatsenglish.InfoImageDto;
+import vn.whatsenglish.ProductInfoResponseDto;
 import vn.whatsenglish.product.constant.Messages;
 import vn.whatsenglish.product.constant.Parameters;
 import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
@@ -18,8 +21,10 @@ import vn.whatsenglish.product.service.IDiscountService;
 import vn.whatsenglish.product.service.IImageService;
 import vn.whatsenglish.product.service.IProductService;
 import vn.whatsenglish.product.util.ObjectsUtil;
+import vn.whatsenglish.product.util.dto.ProductDtoUtil;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,17 +45,12 @@ public class ProductService implements IProductService {
     IDiscountService discountService;
 
     @Override
-    public Product getProductById(Integer id) {
+    public ProductInfoResponseDto getProductById(Integer id) {
         ObjectsUtil.checkRequiredParameters(id, Parameters.PRODUCT_ID_ATTRIBUTE);
-        Optional<Product> product = productRepository.findById(id);
-        product.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
-//        final float currentPrize = product.get().getPrice();
-//        List<Discount> discounts = product.get().getDiscounts();
-//        float finalPrize = discounts.stream().reduce(currentPrize, (accumulator, element) -> {
-//            IDiscountStrategy discountStrategy = processDiscountService.processDiscount(element);
-//            return accumulator - discountStrategy.caculateFinalPrize(currentPrize);
-//        }, Float::sum);
-        return product.get();
+        Optional<Product> optional = productRepository.findById(id);
+        optional.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
+        Product product = optional.get();
+        return ProductDtoUtil.toProductInfoDto(product);
     }
 
     @Override
@@ -76,10 +76,10 @@ public class ProductService implements IProductService {
     @Override
     public void addDiscountToProduct(List<Integer> discountIds, Integer productId) {
         try {
-            List<Discount> discounts = discountService.getAllDiscountsByListIds(discountIds);
-            Product product = getProductById(productId);
-            product.getDiscounts().addAll(discounts);
-            productRepository.save(product);
+//            List<Discount> discounts = discountService.getAllDiscountsByListIds(discountIds);
+//            Product product = getProductById(productId);
+//            product.getDiscounts().addAll(discounts);
+//            productRepository.save(product);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }

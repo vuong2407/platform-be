@@ -10,12 +10,10 @@ message InfoCategoryOfProductDto {
     int32 code = 3;
     string description = 4;
 }
-
 message InfoImageDto {
     int32 id = 1;
     string url = 2;
 }
-
 message ProductInfoResponseDto {
     int32 id = 1;
     InfoCategoryOfProductDto productCategory = 2;

@@ -1,5 +1,7 @@
 package vn.whatsenglish.product.controller;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.whatsenglish.ProductInfoResponseDto;
 import vn.whatsenglish.product.dto.request.AddDiscountToProductRequestDTO;
 import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
 import vn.whatsenglish.product.dto.response.ProductResponseDTO;
@@ -31,11 +34,10 @@ public class ProductController extends BaseController {
     private IDiscountService discountService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> retrieveProductById(@PathVariable String id) {
-        Product product = productService.getProductById(Integer.parseInt(id));
-        ProductResponseDTO productResponseDTO = (new ProductResponseDTO()).ofEntity(product);
-        productResponseDTO.setDisplayPrice(DiscountPrizeCaculationUtil.caculateFinalPrice(product));
-        return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
+    public ResponseEntity<String> retrieveProductById(@PathVariable String id) throws InvalidProtocolBufferException {
+        ProductInfoResponseDto product = productService.getProductById(Integer.parseInt(id));
+        String productJson = JsonFormat.printer().print(product);
+        return new ResponseEntity<>(productJson, HttpStatus.OK);
     }
 
     @PostMapping("/create")
