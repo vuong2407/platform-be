@@ -1,26 +1,36 @@
 package vn.whatsenglish.backend.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import retrofit2.Response;
-import vn.whatsenglish.backend.dto.ProductDto;
-import vn.whatsenglish.backend.retrofit.ServiceProduct;
-
-import java.io.IOException;
+import vn.whatsenglish.AddDiscountToProductRequestDto;
+import vn.whatsenglish.CreateDiscountRequestDto;
+import vn.whatsenglish.CreateProductRequestDto;
+import vn.whatsenglish.GetProductInfoRequestDto;
+import vn.whatsenglish.ProductServiceGrpc;
+import vn.whatsenglish.backend.dto.response.DiscountDto;
+import vn.whatsenglish.backend.dto.response.ProductDto;
+import vn.whatsenglish.backend.util.MessageUtil;
 
 @Service
 public class ProductService {
 
-    @Autowired
-    private ServiceProduct serviceProduct;
+    @GrpcClient("grpc-product-service")
+    private ProductServiceGrpc.ProductServiceBlockingStub productServiceBlockingStub;
 
     public ProductDto getProductById(String id) {
-        try {
-            Response<ProductDto> call = serviceProduct.getProductById(id).execute();
-            return call.body();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
+        GetProductInfoRequestDto request = GetProductInfoRequestDto.newBuilder().setProductId(Integer.parseInt(id)).build();
+        return MessageUtil.convertMessageToDto(productServiceBlockingStub.getProductById(request), ProductDto.class);
+    }
+
+    public ProductDto createProduct(CreateProductRequestDto request) {
+        return MessageUtil.convertMessageToDto(productServiceBlockingStub.createProduct(request), ProductDto.class);
+    }
+
+    public void addDiscount(AddDiscountToProductRequestDto request) {
+        productServiceBlockingStub.addDiscountToProduct(request);
+    }
+
+    public DiscountDto crateDiscount(CreateDiscountRequestDto request) {
+        return MessageUtil.convertMessageToDto(productServiceBlockingStub.createDiscount(request), DiscountDto.class);
     }
 }

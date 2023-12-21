@@ -1,9 +1,10 @@
 package vn.whatsenglish.product.util.dto;
 
-import vn.whatsenglish.InfoCategoryOfProductDto;
-import vn.whatsenglish.InfoImageDto;
+import vn.whatsenglish.Images;
+import vn.whatsenglish.ProductCategory;
 import vn.whatsenglish.ProductInfoResponseDto;
 import vn.whatsenglish.product.entity.Product;
+import vn.whatsenglish.product.strategy.factory.DiscountFactory;
 import vn.whatsenglish.product.util.DiscountPrizeCaculationUtil;
 
 import java.util.ArrayList;
@@ -12,14 +13,14 @@ import java.util.List;
 public class ProductConverterUtil {
 
     public static ProductInfoResponseDto toProductInfoDto(Product product) {
-        InfoCategoryOfProductDto productCategory = InfoCategoryOfProductDto.newBuilder()
+        ProductCategory productCategory = ProductCategory.newBuilder()
                 .setId(product.getProductCategory().getId())
                 .setName(product.getProductCategory().getName())
                 .setCode(product.getProductCategory().getCode())
                 .setDescription(product.getProductCategory().getDescription())
                 .build();
-        List<InfoImageDto> images = new ArrayList<>();
-        product.getImages().forEach(i -> images.add(InfoImageDto.newBuilder()
+        List<Images> images = new ArrayList<>();
+        product.getImages().forEach(i -> images.add(Images.newBuilder()
                 .setId(i.getId())
                 .setUrl(i.getUrl())
                 .build()));

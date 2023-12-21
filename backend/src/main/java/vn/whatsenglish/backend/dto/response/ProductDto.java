@@ -1,8 +1,10 @@
-package vn.whatsenglish.backend.dto;
+package vn.whatsenglish.backend.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.whatsenglish.backend.dto.ImageDto;
+import vn.whatsenglish.backend.dto.ProductCategoryDto;
 
 import java.util.List;
 
@@ -17,4 +19,6 @@ public class ProductDto {
     private Float displayPrice;
     private String description;
     private String thumbnail;
+    private ProductCategoryDto productCategory;
+    private List<ImageDto> images;
 }

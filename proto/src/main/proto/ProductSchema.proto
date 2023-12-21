@@ -4,25 +4,29 @@ option java_multiple_files = true;
 
 package vn.whatsenglish;
 
-message InfoCategoryOfProductDto {
+message GetProductInfoRequestDto {
+    int32 productId = 1;
+}
+
+message ProductCategory {
     int32 id = 1;
     string name = 2;
     int32 code = 3;
     string description = 4;
 }
-message InfoImageDto {
+message Images {
     int32 id = 1;
     string url = 2;
 }
 message ProductInfoResponseDto {
     int32 id = 1;
-    InfoCategoryOfProductDto productCategory = 2;
-    string displayName = 3;
-    float price = 4;
-    float displayPrice = 5;
-    string description = 6;
-    string thumbnail = 7;
-    repeated InfoImageDto images = 8;
+    string displayName = 2;
+    float price = 3;
+    float displayPrice = 4;
+    string description = 5;
+    string thumbnail = 6;
+    ProductCategory productCategory = 7;
+    repeated Images images = 8;
 }
 
 //
@@ -64,4 +68,15 @@ message DiscountResponseDto {
     int32 percentageDiscount = 5;
     float fixedDiscount = 6;
     int32 discountCategoryId = 7;
+}
+
+message AddDiscountResponseDto {
+
+}
+
+service ProductService {
+    rpc getProductById(GetProductInfoRequestDto) returns (ProductInfoResponseDto);
+    rpc createProduct(CreateProductRequestDto) returns (ProductInfoResponseDto);
+    rpc addDiscountToProduct(AddDiscountToProductRequestDto) returns (AddDiscountResponseDto);
+    rpc createDiscount(CreateDiscountRequestDto) returns (DiscountResponseDto);
 }

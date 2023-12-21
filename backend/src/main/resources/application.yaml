@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
   servlet:
     context-path: /backend
 
@@ -18,3 +18,9 @@ spring:
       INDENT_OUTPUT: false
       WRITE_DATES_AS_TIMESTAMPS: false
       WRITE_BIGDECIMAL_AS_PLAIN: true
+
+grpc:
+  client:
+    grpc-product-service:
+      address: static://localhost:9000
+      negotiationType: plaintext
