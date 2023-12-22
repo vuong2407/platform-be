@@ -15,9 +15,8 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
+import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "discount_id"))
     private List<Discount> discounts = new ArrayList<>();
 
-    public static Product ofDto(CreateProductRequestDTO dto) {
+    public static Product ofDto(CreateProductRequestDto dto) {
         return Product.builder()
                 .displayName(dto.getDisplayName())
                 .price(dto.getPrice())

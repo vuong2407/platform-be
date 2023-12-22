@@ -1,18 +1,15 @@
-package vn.whatsenglish.product.dto.request;
+package vn.whatsenglish.domain.dto.product.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.whatsenglish.product.entity.Product;
 
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CreateProductRequestDTO {
+public class CreateProductRequestDto {
 
     private Integer productCategoryId;
     private String displayName;
@@ -20,8 +17,4 @@ public class CreateProductRequestDTO {
     private String description;
     private String thumbnail;
     private List<String> imageUrls;
-
-    public void validateAttribute() {
-        // todo: need to validate all attribute before
-    }
 }

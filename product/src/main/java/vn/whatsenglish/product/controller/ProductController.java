@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.whatsenglish.product.dto.request.AddDiscountToProductRequestDTO;
-import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
-import vn.whatsenglish.product.dto.response.ProductResponseDTO;
-import vn.whatsenglish.product.entity.Discount;
+import vn.whatsenglish.domain.dto.product.request.AddDiscountToProductRequestDto;
+import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
+import vn.whatsenglish.domain.dto.product.response.ProductResponseDto;
 import vn.whatsenglish.product.entity.Product;
 import vn.whatsenglish.product.service.IDiscountService;
 import vn.whatsenglish.product.service.IProductService;
-import vn.whatsenglish.product.util.DiscountPrizeCaculationUtil;
+import vn.whatsenglish.product.util.dto.ProductConvertUtil;
 
 import java.util.List;
 
@@ -31,21 +30,20 @@ public class ProductController extends BaseController {
     private IDiscountService discountService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> retrieveProductById(@PathVariable String id) {
+    public ResponseEntity<ProductResponseDto> retrieveProductById(@PathVariable String id) {
         Product product = productService.getProductById(Integer.parseInt(id));
-        ProductResponseDTO productResponseDTO = (new ProductResponseDTO()).ofEntity(product);
-        productResponseDTO.setDisplayPrice(DiscountPrizeCaculationUtil.caculateFinalPrice(product));
+        ProductResponseDto productResponseDTO = ProductConvertUtil.toDto(product);
         return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody CreateProductRequestDTO body) {
-        ProductResponseDTO productResponseDTO = (new ProductResponseDTO()).ofEntity(productService.createProduct(body));
+    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody CreateProductRequestDto body) {
+        ProductResponseDto productResponseDTO = ProductConvertUtil.toDto(productService.createProduct(body));
         return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
     }
 
     @PostMapping("discount/add")
-    public ResponseEntity<?> addDiscountToProduct(@RequestBody AddDiscountToProductRequestDTO body) {
+    public ResponseEntity<?> addDiscountToProduct(@RequestBody AddDiscountToProductRequestDto body) {
         productService.addDiscountToProduct(body.getDiscountIds(), body.getProductId());
         return null;
     }

@@ -1,22 +1,20 @@
-package vn.whatsenglish.product.dto.request;
+package vn.whatsenglish.domain.dto.product.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateDiscountRequestDTO {
-
+@Builder
+public class DiscountResponseDto {
+    private Integer id;
     private String nameDiscount;
     private String description;
     private String codeDiscount;
     private Integer percentageDiscount;
     private Float fixedDiscount;
-    private Integer discountCategory;
-
-    public void validateAttribute() {
-        // todo: need to validate all attribute before
-    }
+    private Integer discountCategoryId;
 }

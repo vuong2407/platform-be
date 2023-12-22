@@ -3,9 +3,9 @@ package vn.whatsenglish.product.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
 import vn.whatsenglish.product.constant.Messages;
 import vn.whatsenglish.product.constant.Parameters;
-import vn.whatsenglish.product.dto.request.CreateProductRequestDTO;
 import vn.whatsenglish.product.entity.Discount;
 import vn.whatsenglish.product.entity.Image;
 import vn.whatsenglish.product.entity.Product;
@@ -44,17 +44,11 @@ public class ProductService implements IProductService {
         ObjectsUtil.checkRequiredParameters(id, Parameters.PRODUCT_ID_ATTRIBUTE);
         Optional<Product> product = productRepository.findById(id);
         product.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
-//        final float currentPrize = product.get().getPrice();
-//        List<Discount> discounts = product.get().getDiscounts();
-//        float finalPrize = discounts.stream().reduce(currentPrize, (accumulator, element) -> {
-//            IDiscountStrategy discountStrategy = processDiscountService.processDiscount(element);
-//            return accumulator - discountStrategy.caculateFinalPrize(currentPrize);
-//        }, Float::sum);
         return product.get();
     }
 
     @Override
-    public Product createProduct(CreateProductRequestDTO body) {
+    public Product createProduct(CreateProductRequestDto body) {
         // todo: validate body
 
         try {

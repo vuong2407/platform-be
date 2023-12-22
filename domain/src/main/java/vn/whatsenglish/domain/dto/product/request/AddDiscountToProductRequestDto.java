@@ -1,16 +1,15 @@
-package vn.whatsenglish.product.dto.request;
+package vn.whatsenglish.domain.dto.product.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.whatsenglish.product.entity.Discount;
 
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class AddDiscountToProductRequestDTO {
+public class AddDiscountToProductRequestDto {
 
     private Integer productId;
     private List<Integer> discountIds;
