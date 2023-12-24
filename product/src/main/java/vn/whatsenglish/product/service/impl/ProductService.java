@@ -71,11 +71,17 @@ public class ProductService implements IProductService {
     public void addDiscountToProduct(List<Integer> discountIds, Integer productId) {
         try {
             List<Discount> discounts = discountService.getAllDiscountsByListIds(discountIds);
-            Product product = getProductById(productId);
+            Product product = getProductByIdCommon(productId);
             product.getDiscounts().addAll(discounts);
             productRepository.save(product);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
         }
+    }
+
+    private Product getProductByIdCommon(Integer id) {
+        Optional<Product> optional = productRepository.findById(id);
+        optional.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
+        return optional.get();
     }
 }

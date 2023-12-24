@@ -9,7 +9,7 @@ import java.util.List;
 public class DiscountPrizeCaculationUtil {
 
     public static float caculateFinalPrice(Product product) {
-        if (product.getDiscounts().isEmpty()) return product.getPrice();
+        if (product.getDiscounts() == null || product.getDiscounts().isEmpty()) return product.getPrice();
         final float currentPrice = product.getPrice();
         return product.getDiscounts().stream().reduce(currentPrice, (accumulator, element) -> {
             Integer discountCategoryId = element.getDiscountCategory().getId();
