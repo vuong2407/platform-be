@@ -12,11 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-<<<<<<< HEAD
 import vn.whatsenglish.domain.dto.product.request.CreateDiscountRequestDto;
-=======
-import vn.whatsenglish.CreateDiscountRequestDto;
->>>>>>> ffaa65bf6dfa6cbc555bf84c838586cfba1938e1
 
 import java.util.ArrayList;
 import java.util.List;
