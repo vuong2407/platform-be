@@ -15,7 +15,7 @@ public class RetrofitConfig {
     @Bean
     public ServiceProduct buildServiceBooksEndpoint() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://product-service.dev.svc.cluster.local/")
+                .baseUrl("http://localhost:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClientBuilder.build())
                 .build();
