@@ -26,6 +26,7 @@
         <module>product</module>
         <module>backend</module>
         <module>domain</module>
+		<module>order</module>
     </modules>
 
 </project>
