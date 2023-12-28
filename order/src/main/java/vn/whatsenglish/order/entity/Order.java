@@ -10,8 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -21,21 +23,23 @@ import java.util.List;
 
 @Entity(name = "orders")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @Column(name = "order_code")
     private String orderCode;
 
     @Column(name = "customer_id")
-    private Integer customerId;
+    private Long customerId;
 
     @Column(name = "shipping_address_id")
-    private Integer shippingAddressId;
+    private Long shippingAddressId;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "order_to_item",
@@ -43,7 +47,7 @@ public class Order {
     private List<Item> items = new ArrayList<>();
 
     @Column(name = "status")
-    private int orderStatus;
+    private String orderStatus;
 
     @Column(name = "created_date", updatable = false)
     @CreatedDate

@@ -40,7 +40,7 @@ public class ProductService implements IProductService {
     IDiscountService discountService;
 
     @Override
-    public Product getProductById(Integer id) {
+    public Product getProductById(Long id) {
         ObjectsUtil.checkRequiredParameters(id, Parameters.PRODUCT_ID_ATTRIBUTE);
         Optional<Product> product = productRepository.findById(id);
         product.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
@@ -52,7 +52,7 @@ public class ProductService implements IProductService {
         // todo: validate body
 
         try {
-            Integer productCategoryId = body.getProductCategoryId();
+            Long productCategoryId = body.getProductCategoryId();
             ProductCategory productCategory = productCategoryRepository
                     .findById(productCategoryId).orElseThrow(
                             () -> new BadRequestException(MessageFormat.format(Messages.PRODUCT_CATEGORY_NOT_FOUND, productCategoryId)));
@@ -68,7 +68,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public void addDiscountToProduct(List<Integer> discountIds, Integer productId) {
+    public void addDiscountToProduct(List<Long> discountIds, Long productId) {
         try {
             List<Discount> discounts = discountService.getAllDiscountsByListIds(discountIds);
             Product product = getProductByIdCommon(productId);
@@ -79,7 +79,7 @@ public class ProductService implements IProductService {
         }
     }
 
-    private Product getProductByIdCommon(Integer id) {
+    private Product getProductByIdCommon(Long id) {
         Optional<Product> optional = productRepository.findById(id);
         optional.orElseThrow(() -> new NotFoundException(Messages.DATA_IS_NOT_FOUND));
         return optional.get();

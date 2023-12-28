@@ -14,5 +14,5 @@ public class CreateDiscountRequestDto {
     private String codeDiscount;
     private Integer percentageDiscount;
     private Float fixedDiscount;
-    private Integer discountCategory;
+    private Long discountCategory;
 }

@@ -3,6 +3,7 @@ package vn.whatsenglish.domain.dto.order.request;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import vn.whatsenglish.domain.dto.product.ProductItemDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,9 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateOrderRequestDto {
     private String orderCode;
-    private Integer customerId;
-    private Integer shippingAddressId;
-    private List<InfoItemDto> items = new ArrayList<>();
-    private int orderStatus;
+    private Long customerId;
+    private Long shippingAddressId;
+    private Float totalPrice;
+    private List<ProductItemDto> productItems = new ArrayList<>();
+    private String orderStatus;
 }

@@ -30,7 +30,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -47,6 +47,12 @@ public class Product {
 
     @Column(name = "thumbnail")
     private String thumbnail;
+
+    @Column(name = "available_item")
+    private Integer availableItem;
+
+    @Column(name = "reserved_item")
+    private Integer reservedItem;
 
     @OneToMany(mappedBy = "product")
     private List<Image> images;

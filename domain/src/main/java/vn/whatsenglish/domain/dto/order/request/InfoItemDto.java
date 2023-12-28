@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class InfoItemDto {
     private Float price;
-    private Integer productId;
+    private Long productId;
     private Integer quantity;
 }

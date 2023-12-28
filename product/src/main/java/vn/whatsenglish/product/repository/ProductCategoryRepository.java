@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import vn.whatsenglish.product.entity.ProductCategory;
 
 @Repository
-public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
+public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Long> {
 }

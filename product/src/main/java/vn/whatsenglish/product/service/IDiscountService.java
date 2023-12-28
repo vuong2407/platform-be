@@ -9,5 +9,5 @@ import java.util.List;
 public interface IDiscountService {
     DiscountResponseDto createDiscount(CreateDiscountRequestDto body);
 
-    List<Discount> getAllDiscountsByListIds(List<Integer> discountIds);
+    List<Discount> getAllDiscountsByListIds(List<Long> discountIds);
 }

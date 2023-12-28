@@ -43,18 +43,18 @@ public class DiscountService implements IDiscountService {
     }
 
     @Override
-    public List<Discount> getAllDiscountsByListIds(List<Integer> discountIds) {
+    public List<Discount> getAllDiscountsByListIds(List<Long> discountIds) {
         List<Discount> discounts = discountRepository.findAllById(discountIds);
-        Map<Integer, Object> checkMap = new HashMap<>();
+        Map<Long, Object> checkMap = new HashMap<>();
         discounts.forEach(discount -> checkMap.put(discount.getId(), null));
-        List<Integer> discountIdsNotExist = validateDiscountIds(discountIds, checkMap);
+        List<Long> discountIdsNotExist = validateDiscountIds(discountIds, checkMap);
         if (!discountIdsNotExist.isEmpty()) {
             throw new BadRequestException(MessageFormat.format(Messages.DISCOUNT_ID_NOT_FOUND, discountIdsNotExist.toString()));
         }
         return discounts;
     }
 
-    private List<Integer> validateDiscountIds(List<Integer> discountIds, Map<Integer, Object> checkMap) {
+    private List<Long> validateDiscountIds(List<Long> discountIds, Map<Long, Object> checkMap) {
         return discountIds.stream().filter(id -> !checkMap.containsKey(id)).toList();
     }
 }

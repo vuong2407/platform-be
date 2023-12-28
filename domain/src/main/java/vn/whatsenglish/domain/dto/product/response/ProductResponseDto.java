@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class ProductResponseDto {
 
-    private int id;
+    private Long id;
     private InfoCategoryOfProductDto productCategory;
     private String displayName;
     private float price;

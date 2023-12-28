@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class DiscountFactory {
 
-    private static final Map<Integer, Class<? extends IDiscountStrategy>> discountRegister = new HashMap<>();
+    private static final Map<Long, Class<? extends IDiscountStrategy>> discountRegister = new HashMap<>();
 
     static {
         for (Discounts discount : Discounts.values()) {
@@ -22,11 +22,11 @@ public class DiscountFactory {
         }
     }
 
-    public static void registerDiscount(Integer key, Class<? extends IDiscountStrategy> _class) {
+    public static void registerDiscount(Long key, Class<? extends IDiscountStrategy> _class) {
         discountRegister.put(key, _class);
     }
 
-    public static IDiscountStrategy getDiscount(Integer key, Discount discount) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static IDiscountStrategy getDiscount(Long key, Discount discount) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Class<? extends IDiscountStrategy> clazz = discountRegister.get(key);
         if (clazz == null) throw new BadRequestException(MessageFormat.format(Messages.DISCOUNT_CATEGORY_NOT_FOUND, key));
         Constructor<? extends IDiscountStrategy> discountStrategyConstructor = clazz.getDeclaredConstructor(discount.getClass());

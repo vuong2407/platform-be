@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import vn.whatsenglish.product.entity.Discount;
 
 @Repository
-public interface DiscountRepository extends JpaRepository<Discount, Integer> {
+public interface DiscountRepository extends JpaRepository<Discount, Long> {
 }

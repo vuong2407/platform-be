@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InfoCategoryOfProductDto {
-    private int id;
+    private Long id;
     private String name;
     private int code;
     private String description;

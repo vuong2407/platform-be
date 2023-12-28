@@ -31,7 +31,7 @@ public class ProductController extends BaseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> retrieveProductById(@PathVariable String id) {
-        Product product = productService.getProductById(Integer.parseInt(id));
+        Product product = productService.getProductById(Long.parseLong(id));
         ProductResponseDto productResponseDTO = ProductConvertUtil.toDto(product);
         return new ResponseEntity<>(productResponseDTO, HttpStatus.OK);
     }

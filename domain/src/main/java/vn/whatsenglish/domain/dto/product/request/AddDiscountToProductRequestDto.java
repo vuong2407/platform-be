@@ -11,6 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 public class AddDiscountToProductRequestDto {
 
-    private Integer productId;
-    private List<Integer> discountIds;
+    private Long productId;
+    private List<Long> discountIds;
 }

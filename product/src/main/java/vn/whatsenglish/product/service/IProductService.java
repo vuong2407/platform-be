@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IProductService {
 
-    Product getProductById(Integer id);
+    Product getProductById(Long id);
     Product createProduct(CreateProductRequestDto body);
-    void addDiscountToProduct(List<Integer> discountIds, Integer productId);
+    void addDiscountToProduct(List<Long> discountIds, Long productId);
 }

@@ -12,7 +12,7 @@ public class DiscountPrizeCaculationUtil {
         if (product.getDiscounts() == null || product.getDiscounts().isEmpty()) return product.getPrice();
         final float currentPrice = product.getPrice();
         return product.getDiscounts().stream().reduce(currentPrice, (accumulator, element) -> {
-            Integer discountCategoryId = element.getDiscountCategory().getId();
+            Long discountCategoryId = element.getDiscountCategory().getId();
             try {
                 return accumulator - DiscountFactory.getDiscount(discountCategoryId, element).caculateFinalPrize(currentPrice);
             } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |

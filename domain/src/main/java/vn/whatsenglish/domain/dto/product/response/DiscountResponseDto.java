@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class DiscountResponseDto {
-    private Integer id;
+    private Long id;
     private String nameDiscount;
     private String description;
     private String codeDiscount;
     private Integer percentageDiscount;
     private Float fixedDiscount;
-    private Integer discountCategoryId;
+    private Long discountCategoryId;
 }

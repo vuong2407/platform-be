@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateProductRequestDto {
 
-    private Integer productCategoryId;
+    private Long productCategoryId;
     private String displayName;
     private Float price;
     private String description;
