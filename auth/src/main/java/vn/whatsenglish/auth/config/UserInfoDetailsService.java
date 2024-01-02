@@ -17,7 +17,6 @@ import java.util.Optional;
 public class UserInfoDetailsService implements UserDetailsService {
 
     private UserRepository userRepository;
-    private EncodeConfig encodeConfig;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,12 +25,6 @@ public class UserInfoDetailsService implements UserDetailsService {
 
         return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new NoDataFoundException("User not found " + username));
-    }
-
-    public String addUser(User user) {
-        user.setPassword(encodeConfig.passwordEncoder().encode(user.getPassword()));
-        userRepository.save(user);
-        return "User Added Successfully";
     }
 
 }

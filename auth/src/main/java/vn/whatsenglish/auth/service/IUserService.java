@@ -8,6 +8,6 @@ import java.util.List;
 public interface IUserService {
 
     User getUserById(Integer id);
-
+    User createUser(User user);
     List<UserResponse> getAllUser();
 }

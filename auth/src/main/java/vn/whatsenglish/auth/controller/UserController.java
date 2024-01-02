@@ -48,18 +48,18 @@ public class UserController {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody User user) {
-        return userInfoDetailsService.addUser(user);
+    public ResponseEntity<?> addNewUser(@RequestBody User user) {
+        return ResponseEntity.ok(UserResponse.ofEntity(userService.createUser(user)));
     }
 
     @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    @PreAuthorize("hasRole('CUSTOMER')")
     public String userProfile() {
         return "User Profile";
     }
 
     @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminProfile() {
         return "Admin Profile";
     }

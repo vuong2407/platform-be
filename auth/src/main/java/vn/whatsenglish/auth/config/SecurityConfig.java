@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import vn.whatsenglish.auth.enums.Groups;
 import vn.whatsenglish.auth.filter.JwtAuthFilter;
 
 @Configuration
@@ -35,8 +36,8 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/welcome", "/auth/addNewUser",
                                 "/auth/login", "/auth/refreshToken", "auth/logout").permitAll()
-                        .requestMatchers("/auth/user/**").authenticated()
-                        .requestMatchers("/auth/admin/**").authenticated())
+                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
+                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
@@ -55,6 +56,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }
