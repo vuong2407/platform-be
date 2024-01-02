@@ -19,9 +19,8 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
 
     @Override
-    public UserResponse getUserById(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NoDataFoundException("User not found !"));
-        return UserResponse.ofEntity(user);
+    public User getUserById(Integer id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoDataFoundException("User not found !"));
     }
 
     @Override

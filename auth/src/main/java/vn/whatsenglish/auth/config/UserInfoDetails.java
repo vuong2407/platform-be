@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.jwt;
+package vn.whatsenglish.auth.config;
 
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,14 +13,14 @@ import java.util.stream.Collectors;
 
 public class UserInfoDetails implements UserDetails {
 
-    private String name;
-    private String password;
+    private final String name;
+    private final String password;
     @Getter
     private Integer id;
-    private List<GrantedAuthority> authorities;
+    private final List<GrantedAuthority> authorities;
 
     public UserInfoDetails(User user) {
-        name = user.getName();
+        name = user.getUsername();
         password = user.getPassword();
         id = user.getId();
         authorities = Arrays.stream(user.getRoles().split(","))
