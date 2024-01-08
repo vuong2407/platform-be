@@ -1,13 +1,12 @@
 package vn.whatsenglish.auth.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,49 +24,42 @@ import vn.whatsenglish.auth.entity.User;
 import vn.whatsenglish.auth.exception.TokenRefreshException;
 import vn.whatsenglish.auth.jwt.JwtService;
 import vn.whatsenglish.auth.jwt.RefreshJwtTokenService;
-import vn.whatsenglish.auth.jwt.UserInfoDetails;
-import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
+import vn.whatsenglish.auth.config.UserInfoDetails;
+import vn.whatsenglish.auth.config.UserInfoDetailsService;
 import vn.whatsenglish.auth.service.IUserService;
+import vn.whatsenglish.auth.service.impl.RefreshTokenService;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@AllArgsConstructor
 public class UserController {
 
-    @Autowired
     private UserInfoDetailsService userInfoDetailsService;
-
-    @Autowired
     private IUserService userService;
 
-    @Autowired
     private JwtService jwtService;
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private RefreshJwtTokenService refreshJwtTokenService;
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping("/addNewUser")
-    public String addNewUser(@RequestBody User user) {
-        return userInfoDetailsService.addUser(user);
+    public ResponseEntity<?> addNewUser(@RequestBody User user) {
+        return ResponseEntity.ok(UserResponse.ofEntity(userService.createUser(user)));
     }
 
     @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+//    @PreAuthorize("hasRole('CUSTOMER')")
     public String userProfile() {
         return "User Profile";
     }
 
     @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String adminProfile() {
         return "Admin Profile";
     }
@@ -80,41 +72,33 @@ public class UserController {
                         loginRequest.getPassword()
                 )
         );
-        System.out.println("true");
         UserInfoDetails userInfoDetails = (UserInfoDetails) authentication.getPrincipal();
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtService.generateToken(loginRequest.getUsername());
-        RefreshToken refreshToken = refreshJwtTokenService.createRefreshToken(userInfoDetails.getId());
+        RefreshToken refreshToken = refreshJwtTokenService.createOrUpdateRefreshToken(userInfoDetails.getId());
         return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", refreshToken.getToken()));
     }
 
     @PostMapping("/refreshToken")
     public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         String requestRefreshToken = request.getRefreshToken();
-
-        return refreshJwtTokenService.findByToken(requestRefreshToken)
-                .map(refreshJwtTokenService::verifyExpiration)
-                .map(RefreshToken::getUser)
-                .map(user -> {
-                    String token = jwtService.generateToken(user.getName());
-                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken, "Bearer"));
-                })
-                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
-                        "Refresh token is not in database!"));
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logoutUser() {
-        Object d = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserInfoDetails userDetails = (UserInfoDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Integer userId = userDetails.getId();
-        refreshJwtTokenService.deleteByUserId(userId);
-        return ResponseEntity.ok("Log out successful!");
+        try {
+            return refreshTokenService.findByToken(requestRefreshToken)
+                    .map(refreshJwtTokenService::verifyExpiration)
+                    .map(RefreshToken::getUser)
+                    .map(user -> {
+                        String token = jwtService.generateToken(user.getUsername());
+                        return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken, "Bearer"));
+                    })
+                    .orElseThrow(() -> new TokenRefreshException(requestRefreshToken,
+                            "Refresh token is not in database!"));
+        } catch (TokenRefreshException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        return ResponseEntity.ok(UserResponse.ofEntity(userService.getUserById(id)));
     }
 
     @GetMapping("/user/all")

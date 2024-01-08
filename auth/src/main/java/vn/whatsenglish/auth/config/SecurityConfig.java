@@ -1,5 +1,6 @@
 package vn.whatsenglish.auth.config;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,48 +18,36 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import vn.whatsenglish.auth.enums.Groups;
 import vn.whatsenglish.auth.filter.JwtAuthFilter;
-import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
     private EncodeConfig encodeConfig;
-
-    @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver exceptionResolver;
-
-    @Bean
-    public JwtAuthFilter jwtAuthFilter(){
-        return new JwtAuthFilter(exceptionResolver);
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserInfoDetailsService();
-    }
+    private JwtAuthFilter jwtAuthFilter;
+    private UserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/welcome", "/auth/addNewUser",
                                 "/auth/login", "/auth/refreshToken", "auth/logout").permitAll()
-                        .requestMatchers("/auth/user/**").authenticated()
-                        .requestMatchers("/auth/admin/**").authenticated())
+                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
+                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
+        authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(encodeConfig.passwordEncoder());
         return authenticationProvider;
     }
@@ -67,6 +56,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-
 }

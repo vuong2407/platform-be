@@ -7,35 +7,33 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import vn.whatsenglish.auth.jwt.JwtService;
-import vn.whatsenglish.auth.jwt.UserInfoDetailsService;
+import vn.whatsenglish.auth.config.UserInfoDetailsService;
 
 import java.io.IOException;
 
+@Component
+@AllArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
     private JwtService jwtService;
-
-    private HandlerExceptionResolver exceptionResolver;
-
-    @Autowired
-    public JwtAuthFilter(HandlerExceptionResolver exceptionResolver) {
-        this.exceptionResolver = exceptionResolver;
-    }
-
-    @Autowired
     private UserInfoDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             String authHeader = request.getHeader("Authorization");
             String token = null;
@@ -55,7 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException | SignatureException | MalformedJwtException ex) {
-            exceptionResolver.resolveException(request, response, null, ex);
+            System.out.println("error jwt auth filter");
         }
     }
 }
