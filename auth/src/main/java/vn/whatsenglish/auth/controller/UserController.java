@@ -53,13 +53,13 @@ public class UserController {
     }
 
     @GetMapping("/user/userProfile")
-//    @PreAuthorize("hasRole('CUSTOMER')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public String userProfile() {
         return "User Profile";
     }
 
     @GetMapping("/admin/adminProfile")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String adminProfile() {
         return "Admin Profile";
     }

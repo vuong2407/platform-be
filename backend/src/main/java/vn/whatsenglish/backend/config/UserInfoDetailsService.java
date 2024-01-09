@@ -1,15 +1,13 @@
-package vn.whatsenglish.auth.config;
+package vn.whatsenglish.backend.config;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import vn.whatsenglish.auth.entity.User;
-import vn.whatsenglish.auth.exception.NoDataFoundException;
-import vn.whatsenglish.auth.repository.UserRepository;
+import vn.whatsenglish.backend.entity.User;
+import vn.whatsenglish.backend.exception.NoDataFoundException;
+import vn.whatsenglish.backend.repository.UserRepository;
 
 import java.util.Optional;
 

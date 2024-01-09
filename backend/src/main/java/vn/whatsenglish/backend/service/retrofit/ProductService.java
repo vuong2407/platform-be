@@ -1,4 +1,4 @@
-package vn.whatsenglish.backend.service;
+package vn.whatsenglish.backend.service.retrofit;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;

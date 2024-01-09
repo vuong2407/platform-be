@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.exception;
+package vn.whatsenglish.backend.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
