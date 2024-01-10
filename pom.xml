@@ -30,6 +30,7 @@
 		<module>order</module>
 		<module>customer</module>
 		<module>payment</module>
+		<module>orchestrator</module>
     </modules>
 
 </project>
