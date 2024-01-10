@@ -1,5 +1,6 @@
 package vn.whatsenglish.backend.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,13 +17,12 @@ import vn.whatsenglish.domain.dto.product.response.ProductResponseDto;
 
 @RestController
 @RequestMapping("/product")
+@AllArgsConstructor
 public class ProductController extends BaseController {
 
-    @Autowired
     private ProductService productService;
 
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('CUSTOMER')")
     public ResponseEntity<?> getProduct(@PathVariable String id)  {
         Response<ProductResponseDto> response = productService.getProductById(id);
         return this.handleResponse(response);

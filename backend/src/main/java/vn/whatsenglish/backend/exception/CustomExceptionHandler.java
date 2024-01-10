@@ -53,4 +53,9 @@ public class CustomExceptionHandler {
     public ProblemDetail handleNoDataException(NoDataFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());
     }
+
+    @ExceptionHandler(BadGatewayException.class)
+    public ProblemDetail handleBadGatewayException(BadGatewayException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(502), ex.getMessage());
+    }
 }
