@@ -25,6 +25,8 @@ import vn.whatsenglish.backend.jwt.JwtService;
 import vn.whatsenglish.backend.jwt.RefreshJwtTokenService;
 import vn.whatsenglish.backend.service.IUserService;
 import vn.whatsenglish.backend.service.impl.RefreshTokenService;
+import vn.whatsenglish.domain.dto.payment.request.PaymentRequestDto;
+import vn.whatsenglish.domain.dto.payment.response.PaymentResponseDto;
 
 import javax.validation.Valid;
 
@@ -75,5 +77,10 @@ public class UserController {
         } catch (TokenRefreshException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/deduct")
+    public ResponseEntity<PaymentResponseDto> deductAmount(@Valid @RequestBody PaymentRequestDto request) {
+        return new ResponseEntity<>(userService.deductAmount(request), HttpStatus.OK);
     }
 }

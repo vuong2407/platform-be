@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/product/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/product/**", "/user/deduct").permitAll())
 //                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
 //                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
