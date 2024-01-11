@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.whatsenglish.domain.dto.product.request.AddDiscountToProductRequestDto;
 import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
+import vn.whatsenglish.domain.dto.product.request.DeductProductRequestDto;
 import vn.whatsenglish.domain.dto.product.response.ProductResponseDto;
 import vn.whatsenglish.product.entity.Product;
 import vn.whatsenglish.product.service.IDiscountService;
@@ -46,5 +47,16 @@ public class ProductController extends BaseController {
     public ResponseEntity<?> addDiscountToProduct(@RequestBody AddDiscountToProductRequestDto body) {
         productService.addDiscountToProduct(body.getDiscountIds(), body.getProductId());
         return null;
+    }
+
+    @PostMapping("deduct")
+    public ResponseEntity<?> deductProduct(@RequestBody DeductProductRequestDto body) {
+        return new ResponseEntity<>(productService.deductProduct(body), HttpStatus.OK);
+    }
+
+    @PostMapping("deduct/revert")
+    public ResponseEntity<?> revertDeductingProduct(@RequestBody DeductProductRequestDto body) {
+        productService.revertDeductingProduct(body);
+        return new ResponseEntity<>("revert success", HttpStatus.OK);
     }
 }
