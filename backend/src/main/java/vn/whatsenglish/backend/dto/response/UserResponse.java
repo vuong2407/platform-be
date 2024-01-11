@@ -1,10 +1,10 @@
-package vn.whatsenglish.auth.dto.response;
+package vn.whatsenglish.backend.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import vn.whatsenglish.auth.entity.User;
+import vn.whatsenglish.backend.entity.User;
 
 @Data
 @NoArgsConstructor

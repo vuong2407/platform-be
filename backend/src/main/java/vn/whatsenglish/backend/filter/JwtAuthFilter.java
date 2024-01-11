@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.filter;
+package vn.whatsenglish.backend.filter;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -7,18 +7,16 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import vn.whatsenglish.auth.jwt.JwtService;
-import vn.whatsenglish.auth.config.UserInfoDetailsService;
+import vn.whatsenglish.backend.config.UserInfoDetailsService;
+import vn.whatsenglish.backend.jwt.JwtService;
 
 import java.io.IOException;
 

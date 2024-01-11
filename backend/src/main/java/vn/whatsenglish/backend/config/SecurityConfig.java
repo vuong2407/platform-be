@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.config;
+package vn.whatsenglish.backend.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,8 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import vn.whatsenglish.auth.enums.Groups;
-import vn.whatsenglish.auth.filter.JwtAuthFilter;
+import vn.whatsenglish.backend.enums.Groups;
+import vn.whatsenglish.backend.filter.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -45,10 +45,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/welcome", "/auth/addNewUser",
-                                "/auth/login", "/auth/refreshToken", "auth/logout").permitAll()
-                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
-                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/product/**", "/user/deduct").permitAll())
+//                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
+//                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)

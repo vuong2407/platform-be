@@ -1,67 +1,50 @@
-package vn.whatsenglish.auth.controller;
+package vn.whatsenglish.backend.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.whatsenglish.auth.dto.request.LoginRequest;
-import vn.whatsenglish.auth.dto.request.TokenRefreshRequest;
-import vn.whatsenglish.auth.dto.response.JwtResponse;
-import vn.whatsenglish.auth.dto.response.TokenRefreshResponse;
-import vn.whatsenglish.auth.dto.response.UserResponse;
-import vn.whatsenglish.auth.entity.RefreshToken;
-import vn.whatsenglish.auth.entity.User;
-import vn.whatsenglish.auth.exception.TokenRefreshException;
-import vn.whatsenglish.auth.jwt.JwtService;
-import vn.whatsenglish.auth.jwt.RefreshJwtTokenService;
-import vn.whatsenglish.auth.config.UserInfoDetails;
-import vn.whatsenglish.auth.config.UserInfoDetailsService;
-import vn.whatsenglish.auth.service.IUserService;
-import vn.whatsenglish.auth.service.impl.RefreshTokenService;
+import vn.whatsenglish.backend.config.UserInfoDetails;
+import vn.whatsenglish.backend.config.UserInfoDetailsService;
+import vn.whatsenglish.backend.dto.request.LoginRequest;
+import vn.whatsenglish.backend.dto.request.TokenRefreshRequest;
+import vn.whatsenglish.backend.dto.response.JwtResponse;
+import vn.whatsenglish.backend.dto.response.TokenRefreshResponse;
+import vn.whatsenglish.backend.dto.response.UserResponse;
+import vn.whatsenglish.backend.entity.RefreshToken;
+import vn.whatsenglish.backend.entity.User;
+import vn.whatsenglish.backend.exception.TokenRefreshException;
+import vn.whatsenglish.backend.jwt.JwtService;
+import vn.whatsenglish.backend.jwt.RefreshJwtTokenService;
+import vn.whatsenglish.backend.service.IUserService;
+import vn.whatsenglish.backend.service.impl.RefreshTokenService;
+import vn.whatsenglish.domain.dto.payment.request.PaymentRequestDto;
+import vn.whatsenglish.domain.dto.payment.response.PaymentResponseDto;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
 
-    private UserInfoDetailsService userInfoDetailsService;
     private IUserService userService;
-
     private JwtService jwtService;
-
     private AuthenticationManager authenticationManager;
-
     private RefreshJwtTokenService refreshJwtTokenService;
-
     private RefreshTokenService refreshTokenService;
+    private UserInfoDetailsService userInfoDetailsService;
 
-    @PostMapping("/addNewUser")
+    @PostMapping("/create")
     public ResponseEntity<?> addNewUser(@RequestBody User user) {
         return ResponseEntity.ok(UserResponse.ofEntity(userService.createUser(user)));
-    }
-
-    @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('CUSTOMER')")
-    public String userProfile() {
-        return "User Profile";
-    }
-
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public String adminProfile() {
-        return "Admin Profile";
     }
 
     @PostMapping("/login")
@@ -96,14 +79,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable int id) {
-        return ResponseEntity.ok(UserResponse.ofEntity(userService.getUserById(id)));
+    @PostMapping("/deduct-payment")
+    public ResponseEntity<PaymentResponseDto> deductAmount(@Valid @RequestBody PaymentRequestDto request) {
+        return new ResponseEntity<>(userService.deductPayment(request), HttpStatus.OK);
     }
 
-    @GetMapping("/user/all")
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUser());
+    @PostMapping("/deduct-payment/revert")
+    public ResponseEntity<?> revertDeductingPayment(@Valid @RequestBody PaymentRequestDto request) {
+        userService.revertDeductingPayment(request);
+        return new ResponseEntity<>("revert deducting payment success", HttpStatus.OK);
     }
-
 }

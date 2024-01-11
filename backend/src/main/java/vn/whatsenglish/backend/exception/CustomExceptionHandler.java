@@ -1,4 +1,4 @@
-package vn.whatsenglish.auth.exception;
+package vn.whatsenglish.backend.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -52,5 +52,10 @@ public class CustomExceptionHandler {
     @ExceptionHandler(NoDataFoundException.class)
     public ProblemDetail handleNoDataException(NoDataFoundException ex) {
         return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(400), ex.getMessage());
+    }
+
+    @ExceptionHandler(BadGatewayException.class)
+    public ProblemDetail handleBadGatewayException(BadGatewayException ex) {
+        return ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(502), ex.getMessage());
     }
 }

@@ -1,9 +1,7 @@
-package vn.whatsenglish.auth.repository;
+package vn.whatsenglish.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import vn.whatsenglish.auth.entity.RefreshToken;
-import vn.whatsenglish.auth.entity.User;
+import vn.whatsenglish.backend.entity.RefreshToken;
 
 import java.util.Optional;
 

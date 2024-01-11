@@ -1,15 +1,13 @@
-package vn.whatsenglish.auth.jwt;
+package vn.whatsenglish.backend.jwt;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import vn.whatsenglish.auth.entity.RefreshToken;
-import vn.whatsenglish.auth.exception.TokenRefreshException;
-import vn.whatsenglish.auth.repository.RefreshTokenRepository;
-import vn.whatsenglish.auth.repository.UserRepository;
-import vn.whatsenglish.auth.service.impl.RefreshTokenService;
+import vn.whatsenglish.backend.entity.RefreshToken;
+import vn.whatsenglish.backend.exception.TokenRefreshException;
+import vn.whatsenglish.backend.repository.RefreshTokenRepository;
+import vn.whatsenglish.backend.repository.UserRepository;
+import vn.whatsenglish.backend.service.impl.RefreshTokenService;
 
 import java.time.Instant;
 import java.util.Optional;

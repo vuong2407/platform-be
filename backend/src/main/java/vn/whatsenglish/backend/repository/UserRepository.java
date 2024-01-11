@@ -1,8 +1,8 @@
-package vn.whatsenglish.auth.repository;
+package vn.whatsenglish.backend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import vn.whatsenglish.auth.entity.User;
+import vn.whatsenglish.backend.entity.User;
 
 import java.util.Optional;
 
