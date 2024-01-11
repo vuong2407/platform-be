@@ -47,7 +47,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public PaymentResponseDto deductAmount(PaymentRequestDto request) {
+    public PaymentResponseDto deductPayment(PaymentRequestDto request) {
         User user = getUserById(request.getUserId());
         Float balance = user.getAmount();
         PaymentResponseDto response = (PaymentResponseDto) PaymentResponseDto.builder()
@@ -62,5 +62,12 @@ public class UserService implements IUserService {
             response.setStatus(OrderStatus.ACCEPT);
         }
         return response;
+    }
+
+    @Override
+    public void revertDeductingPayment(PaymentRequestDto request) {
+        User user = getUserById(request.getUserId());
+        user.setAmount(request.getAmount() + user.getAmount());
+        userRepository.save(user);
     }
 }

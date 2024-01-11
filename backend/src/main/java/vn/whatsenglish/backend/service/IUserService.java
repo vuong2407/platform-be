@@ -12,5 +12,6 @@ public interface IUserService {
     User getUserById(Integer id);
     User createUser(User user);
     List<UserResponse> getAllUser();
-    PaymentResponseDto deductAmount(PaymentRequestDto request);
+    PaymentResponseDto deductPayment(PaymentRequestDto request);
+    void revertDeductingPayment(PaymentRequestDto request);
 }

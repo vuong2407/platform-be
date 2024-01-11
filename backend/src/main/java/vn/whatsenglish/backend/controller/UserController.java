@@ -79,8 +79,14 @@ public class UserController {
         }
     }
 
-    @PostMapping("/deduct")
+    @PostMapping("/deduct-payment")
     public ResponseEntity<PaymentResponseDto> deductAmount(@Valid @RequestBody PaymentRequestDto request) {
-        return new ResponseEntity<>(userService.deductAmount(request), HttpStatus.OK);
+        return new ResponseEntity<>(userService.deductPayment(request), HttpStatus.OK);
+    }
+
+    @PostMapping("/deduct-payment/revert")
+    public ResponseEntity<?> revertDeductingPayment(@Valid @RequestBody PaymentRequestDto request) {
+        userService.revertDeductingPayment(request);
+        return new ResponseEntity<>("revert deducting payment success", HttpStatus.OK);
     }
 }
