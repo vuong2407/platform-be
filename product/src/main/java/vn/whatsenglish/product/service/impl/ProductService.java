@@ -3,7 +3,11 @@ package vn.whatsenglish.product.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.whatsenglish.domain.dto.product.ProductItemDto;
 import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
+import vn.whatsenglish.domain.dto.product.request.DeductProductRequestDto;
+import vn.whatsenglish.domain.dto.product.response.DeductProductResponseDto;
+import vn.whatsenglish.domain.enums.OrderStatus;
 import vn.whatsenglish.product.constant.Messages;
 import vn.whatsenglish.product.constant.Parameters;
 import vn.whatsenglish.product.entity.Discount;
@@ -76,6 +80,40 @@ public class ProductService implements IProductService {
             productRepository.save(product);
         } catch (Exception e) {
             throw new BadRequestException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public DeductProductResponseDto deductProduct(DeductProductRequestDto request) {
+        List<ProductItemDto> items = request.getItems();
+        DeductProductResponseDto response = DeductProductResponseDto.builder()
+                .orderId(request.getOrderId())
+                .userId(request.getUserId())
+                .items(request.getItems())
+                .status(OrderStatus.ACCEPT)
+                .build();
+        for (ProductItemDto item : items) {
+            Optional<Product> optional = productRepository.findById(item.getProductId());
+            optional.orElseThrow(() -> new BadRequestException(MessageFormat.format(Messages.PRODUCT_CATEGORY_NOT_FOUND, item.getProductId())));
+            Product product = optional.get();
+            if (product.getAvailableItem() < item.getQuantity()) {
+                response.setStatus(OrderStatus.REJECT);
+                break;
+            }
+            product.setAvailableItem(product.getAvailableItem() - item.getQuantity());
+            productRepository.save(product);
+        }
+        return response;
+    }
+
+    @Override
+    public void revertDeductingProduct(DeductProductRequestDto request) {
+        List<ProductItemDto> items = request.getItems();
+        for (ProductItemDto item : items) {
+            Product product = getProductById(item.getProductId());
+            product.setAvailableItem(product.getAvailableItem() + item.getQuantity());
+            productRepository.save(product);
         }
     }
 
