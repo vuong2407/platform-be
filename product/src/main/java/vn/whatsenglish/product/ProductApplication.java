@@ -20,13 +20,13 @@ public class ProductApplication {
 		SpringApplication.run(ProductApplication.class, args);
 	}
 
-	@KafkaListener(id = "orders", topics = "orders", groupId = "stock")
-	public void onEvent(OrderMessage orderMessage) {
-		if (orderMessage.getStatus().equals(OrderStatus.NEW.toString())) {
-			orderManagementService.reserve(orderMessage);
-		} else {
-			orderManagementService.confirm(orderMessage);
-		}
-	}
+//	@KafkaListener(id = "orders", topics = "orders", groupId = "stock")
+//	public void onEvent(OrderMessage orderMessage) {
+//		if (orderMessage.getStatus().equals(OrderStatus.NEW.toString())) {
+//			orderManagementService.reserve(orderMessage);
+//		} else {
+//			orderManagementService.confirm(orderMessage);
+//		}
+//	}
 
 }

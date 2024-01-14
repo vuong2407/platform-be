@@ -18,20 +18,20 @@ public class OrderManagementService {
     private OrderRepository orderRepository;
 
     public OrderMessage confirm(OrderMessage orderPayment, OrderMessage orderProduct) {
-        Order order = orderService.getOrderById(orderPayment.getId());
-        orderPayment.getRollbackServices().addAll(orderProduct.getRollbackServices());
-        if (orderPayment.getStatus().equals(OrderStatus.ACCEPT.toString())
-                && orderProduct.getStatus().equals(OrderStatus.ACCEPT.toString())) {
-            order.setOrderStatus(OrderStatus.CONFIRMED.toString());
-        } else if (orderPayment.getStatus().equals(OrderStatus.REJECT.toString())
-                && orderProduct.getStatus().equals(OrderStatus.REJECT.toString())) {
-            order.setOrderStatus(OrderStatus.REJECTED.toString());
-        } else if (orderPayment.getStatus().equals(OrderStatus.REJECT.toString())
-                || orderProduct.getStatus().equals(OrderStatus.REJECT.toString())) {
-            order.setOrderStatus(OrderStatus.ROLLBACK.toString());
-        }
-        orderRepository.save(order);
-        orderPayment.setStatus(order.getOrderStatus());
-        return orderPayment;
+//        Order order = orderService.getOrderById(orderPayment.getId());
+//        orderPayment.getRollbackServices().addAll(orderProduct.getRollbackServices());
+//        if (orderPayment.getStatus().equals(OrderStatus.ACCEPT.toString())
+//                && orderProduct.getStatus().equals(OrderStatus.ACCEPT.toString())) {
+//            order.setOrderStatus(OrderStatus.CONFIRMED.toString());
+//        } else if (orderPayment.getStatus().equals(OrderStatus.REJECT.toString())
+//                && orderProduct.getStatus().equals(OrderStatus.REJECT.toString())) {
+//            order.setOrderStatus(OrderStatus.REJECTED.toString());
+//        } else if (orderPayment.getStatus().equals(OrderStatus.REJECT.toString())
+//                || orderProduct.getStatus().equals(OrderStatus.REJECT.toString())) {
+//            order.setOrderStatus(OrderStatus.ROLLBACK.toString());
+//        }
+//        orderRepository.save(order);
+//        orderPayment.setStatus(order.getOrderStatus());
+        return null;
     }
 }

@@ -29,6 +29,8 @@ import vn.whatsenglish.domain.dto.payment.request.PaymentRequestDto;
 import vn.whatsenglish.domain.dto.payment.response.PaymentResponseDto;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -86,7 +88,9 @@ public class UserController {
 
     @PostMapping("/deduct-payment/revert")
     public ResponseEntity<?> revertDeductingPayment(@Valid @RequestBody PaymentRequestDto request) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "revert deducting payment success");
         userService.revertDeductingPayment(request);
-        return new ResponseEntity<>("revert deducting payment success", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

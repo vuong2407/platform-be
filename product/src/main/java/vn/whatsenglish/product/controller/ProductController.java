@@ -18,7 +18,9 @@ import vn.whatsenglish.product.service.IDiscountService;
 import vn.whatsenglish.product.service.IProductService;
 import vn.whatsenglish.product.util.dto.ProductConvertUtil;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -56,7 +58,9 @@ public class ProductController extends BaseController {
 
     @PostMapping("deduct/revert")
     public ResponseEntity<?> revertDeductingProduct(@RequestBody DeductProductRequestDto body) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "revert success");
         productService.revertDeductingProduct(body);
-        return new ResponseEntity<>("revert success", HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

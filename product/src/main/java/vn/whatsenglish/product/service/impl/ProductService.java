@@ -2,7 +2,11 @@ package vn.whatsenglish.product.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import vn.whatsenglish.domain.dto.product.ProductItemDto;
 import vn.whatsenglish.domain.dto.product.request.CreateProductRequestDto;
 import vn.whatsenglish.domain.dto.product.request.DeductProductRequestDto;
@@ -42,6 +46,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     IDiscountService discountService;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Override
     public Product getProductById(Long id) {
@@ -84,27 +91,38 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    @Transactional
+//    @Transactional
     public DeductProductResponseDto deductProduct(DeductProductRequestDto request) {
-        List<ProductItemDto> items = request.getItems();
-        DeductProductResponseDto response = DeductProductResponseDto.builder()
-                .orderId(request.getOrderId())
-                .userId(request.getUserId())
-                .items(request.getItems())
-                .status(OrderStatus.ACCEPT)
-                .build();
-        for (ProductItemDto item : items) {
-            Optional<Product> optional = productRepository.findById(item.getProductId());
-            optional.orElseThrow(() -> new BadRequestException(MessageFormat.format(Messages.PRODUCT_CATEGORY_NOT_FOUND, item.getProductId())));
-            Product product = optional.get();
-            if (product.getAvailableItem() < item.getQuantity()) {
-                response.setStatus(OrderStatus.REJECT);
-                break;
+        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+        definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        definition.setTimeout(10000);
+        TransactionStatus status = transactionManager.getTransaction(definition);
+        try {
+            List<ProductItemDto> items = request.getItems();
+            DeductProductResponseDto response = DeductProductResponseDto.builder()
+                    .orderId(request.getOrderId())
+                    .userId(request.getUserId())
+                    .items(request.getItems())
+                    .status(OrderStatus.ACCEPT)
+                    .build();
+            for (ProductItemDto item : items) {
+                Optional<Product> optional = productRepository.findById(item.getProductId());
+                optional.orElseThrow(() -> new BadRequestException(MessageFormat.format(Messages.PRODUCT_CATEGORY_NOT_FOUND, item.getProductId())));
+                Product product = optional.get();
+                if (product.getAvailableItem() < item.getQuantity()) {
+                    response.setStatus(OrderStatus.REJECT);
+                    transactionManager.rollback(status);
+                    return response;
+                }
+                product.setAvailableItem(product.getAvailableItem() - item.getQuantity());
+                productRepository.save(product);
             }
-            product.setAvailableItem(product.getAvailableItem() - item.getQuantity());
-            productRepository.save(product);
+            transactionManager.commit(status);
+            return response;
+        } catch (Exception e) {
+            transactionManager.rollback(status);
+            throw new BadRequestException(e.getMessage());
         }
-        return response;
     }
 
     @Override

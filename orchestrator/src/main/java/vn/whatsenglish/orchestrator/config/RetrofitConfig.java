@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import vn.whatsenglish.orchestrator.retrofit.ServiceCustomer;
+import vn.whatsenglish.orchestrator.retrofit.ServiceProduct;
+import vn.whatsenglish.orchestrator.retrofit.ServiceUser;
 
 @Configuration
 public class RetrofitConfig {
@@ -13,12 +14,22 @@ public class RetrofitConfig {
     private final OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
 
     @Bean
-    public ServiceCustomer buildServiceBooksEndpoint() {
+    public ServiceUser buildServiceUserEndpoint() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8082/")
+                .baseUrl("http://localhost:8090/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClientBuilder.build())
                 .build();
-        return retrofit.create(ServiceCustomer.class);
+        return retrofit.create(ServiceUser.class);
+    }
+
+    @Bean
+    public ServiceProduct buildServiceProductEndpoint() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://localhost:8083/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClientBuilder.build())
+                .build();
+        return retrofit.create(ServiceProduct.class);
     }
 }
