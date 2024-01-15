@@ -1,4 +1,4 @@
-package vn.whatsenglish.orchestrator.service;
+package vn.whatsenglish.orchestrator.service.orchestrator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

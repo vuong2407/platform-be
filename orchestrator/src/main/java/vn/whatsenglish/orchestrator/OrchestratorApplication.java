@@ -11,7 +11,7 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import vn.whatsenglish.domain.message.PlacingOrderMessage;
 import vn.whatsenglish.domain.message.PlacingOrderMessageResponse;
-import vn.whatsenglish.orchestrator.service.OrderOrchestrator;
+import vn.whatsenglish.orchestrator.service.orchestrator.OrderOrchestrator;
 
 @SpringBootApplication
 @EnableKafka
@@ -45,7 +45,8 @@ public class OrchestratorApplication {
 
 	@KafkaListener(id = "orchestrator", topics = "order-requests", groupId = "orchestrator")
 	public void onEventPlacingOrder(PlacingOrderMessage placingOrderMessage) {
-		orderTemplate.send("order-responses", placingOrderMessage.getOrderId(), orderOrchestrator.orderProduct(placingOrderMessage));
+		PlacingOrderMessageResponse messageResponse = orderOrchestrator.orderProduct(placingOrderMessage);
+		orderTemplate.send("order-responses", placingOrderMessage.getOrderId(), messageResponse);
 	}
 
 }
