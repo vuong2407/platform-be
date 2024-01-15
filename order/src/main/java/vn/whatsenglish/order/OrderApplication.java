@@ -10,16 +10,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.config.TopicBuilder;
 import vn.whatsenglish.domain.message.PlacingOrderMessageResponse;
 import vn.whatsenglish.order.service.IOrderService;
-import vn.whatsenglish.order.service.impl.OrderManagementService;
-
-import java.time.Duration;
 
 @SpringBootApplication
 @EnableKafka
 public class OrderApplication {
-
-	@Autowired
-	OrderManagementService orderManagementService;
 
 	@Autowired
 	private IOrderService orderService;

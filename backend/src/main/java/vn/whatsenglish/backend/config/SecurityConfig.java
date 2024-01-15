@@ -47,7 +47,8 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/product/**",
                         "/user/deduct-payment",
-                        "/user/deduct-payment/revert").permitAll())
+                        "/user/deduct-payment/revert",
+                        "/user/create").permitAll())
 //                        .requestMatchers("/auth/user/**").hasAuthority(Groups.CUSTOMER.getGroupName())
 //                        .requestMatchers("/auth/admin/**").hasAuthority(Groups.ADMIN.getGroupName()))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

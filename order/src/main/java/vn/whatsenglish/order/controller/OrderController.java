@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.whatsenglish.domain.dto.order.request.CreateOrderRequestDto;
 import vn.whatsenglish.domain.enums.OrderStatus;
-import vn.whatsenglish.domain.message.OrderMessage;
 import vn.whatsenglish.domain.message.PlacingOrderMessage;
 import vn.whatsenglish.order.entity.Order;
 import vn.whatsenglish.order.service.IOrderService;
@@ -20,9 +18,6 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/order")
 public class OrderController extends BaseController {
-
-    @Autowired
-    private KafkaTemplate<Long, OrderMessage> template;
 
     @Autowired
     private KafkaTemplate<Integer, PlacingOrderMessage> orderTemplate;
